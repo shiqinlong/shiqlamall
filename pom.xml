@@ -16,6 +16,8 @@
         <module>shiqlamall-member</module>
         <module>shiqlamall-order</module>
         <module>shiqlamall-product</module>
+        <module>renren-fast</module>
+        <module>shiqlamall-common</module>
     </modules>
 
 </project>
