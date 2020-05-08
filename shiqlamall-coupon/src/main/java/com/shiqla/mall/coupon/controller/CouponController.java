@@ -27,8 +27,15 @@ import com.shiqla.common.utils.R;
 @RestController
 @RequestMapping("coupon/coupon")
 public class CouponController {
+
     @Autowired
     private CouponService couponService;
+
+
+    @RequestMapping("member/list")
+    public R memberCoupon(){
+        return R.ok().put("memberCoupon","coupons");
+    }
 
     /**
      * 列表
