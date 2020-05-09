@@ -8,6 +8,7 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
+        namespace: 55d78d3e-751d-41b4-9374-47b0ab2c95e7
   application:
     name: shiqlamall-coupon
 

@@ -1,0 +1,6 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: coupon
+          uri: https://www.baidu.com
