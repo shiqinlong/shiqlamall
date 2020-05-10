@@ -2,6 +2,7 @@ package com.shiqla.mall.product.service.impl;
 
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,6 +22,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     implements CategoryService
 {
 
+
+
+
     @Override
     public PageUtils queryPage (Map<String, Object> params)
     {
@@ -36,21 +40,32 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     public List<CategoryEntity> listWithTree ()
     {
         List<CategoryEntity> categoryEntities = this.baseMapper.selectList(null);
-        List<CategoryEntity> level1List = categoryEntities.stream().filter(categoryEntity ->
+        return categoryEntities.stream().filter(categoryEntity ->
             categoryEntity.getParentCid() == 0
         ).map(menu -> {
-            menu.setChildren(getChildren(menu, categoryEntities));
+            menu.setChildren(getChildren(categoryEntities, menu));
             return menu;
-        }).collect(Collectors.toList());
-
-        return level1List;
+        }).sorted(Comparator.comparing(CategoryEntity::getSort)).collect(Collectors.toList());
     }
 
-    private List<CategoryEntity> getChildren (CategoryEntity menu,
-                                              List<CategoryEntity> entityList)
+    @Override
+    public void removeMenuByIds (List<Long> asList)
     {
+        //TODO 检查调用列表
+        this.baseMapper.deleteBatchIds(asList);
 
-        // to do..
-        return null;
+    }
+
+    private List<CategoryEntity> getChildren (List<CategoryEntity> entityList,
+                                              CategoryEntity root)
+    {
+        return entityList.stream().filter(categoryEntity ->
+            categoryEntity.getParentCid().equals(root.getCatId())
+        ).map(categoryEntity -> {
+            categoryEntity.setChildren(getChildren(entityList, categoryEntity));
+            return categoryEntity;
+        }).sorted(Comparator.comparingInt(menu -> (menu.getSort() == null ?
+            0 :
+            menu.getSort()))).collect(Collectors.toList());
     }
 }
