@@ -3,6 +3,12 @@ spring:
     gateway:
       routes:
         - id: product_route
+          uri: lb://shiqlamall-third-part
+          predicates:
+            - Path=/api/thirdpart/**
+          filters:
+            - RewritePath=/api/thirdpart/(?<segment>.*),/$\{segment}
+        - id: product_route
           uri: lb://shiqlamall-product
           predicates:
             - Path=/api/product/**
