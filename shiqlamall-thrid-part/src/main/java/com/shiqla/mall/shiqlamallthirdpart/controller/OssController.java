@@ -4,6 +4,7 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
+import com.shiqla.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +37,7 @@ public class OssController
     private String accessId;
 
     @RequestMapping("/oss/policy")
-    public Map<String, String> getPolicy(){
+    public R getPolicy(){
 
         String endpoint = "oss-cn-hangzhou.aliyuncs.com"; // 请填写您的 endpoint。
         String host = "https://" + bucket + "." + endpoint; // host的格式为 bucketname.endpoint
@@ -69,7 +70,7 @@ public class OssController
             respMap.put("expire", String.valueOf(expireEndTime / 1000));
             // respMap.put("expire", formatISO8601Date(expiration));
 
-            return respMap;
+            return R.ok().put("data",respMap);
         } catch (Exception e) {
             // Assert.fail(e.getMessage());
             System.out.println(e.getMessage());
